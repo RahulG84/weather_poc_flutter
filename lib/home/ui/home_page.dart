@@ -32,7 +32,6 @@ class _HomePageState extends State<HomePage> {
         child: Container(
           child: Column(
             children: [
-              const Text('Home Page'),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
