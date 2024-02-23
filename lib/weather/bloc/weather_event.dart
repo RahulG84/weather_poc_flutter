@@ -4,9 +4,4 @@ part of 'weather_bloc.dart';
 sealed class WeatherEvent {}
 
 final class WeatherFetchEvent extends WeatherEvent {
-  String locationName;
-  
-  WeatherFetchEvent({
-    required this.locationName,
-  });
 }

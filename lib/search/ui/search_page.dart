@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_poc/model/city_name_data_model.dart';
 
 import '../../weather/bloc/weather_bloc.dart';
 import '../widget/weather_icon.dart';
@@ -13,8 +14,6 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   WeatherBloc weatherBloc = WeatherBloc();
-  TextEditingController cityNameController =
-      TextEditingController(text: 'Pune');
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +38,7 @@ class _SearchPageState extends State<SearchPage> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: TextFormField(
-                  controller: cityNameController,
+                  controller: CityNameData.cityName,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -51,7 +50,7 @@ class _SearchPageState extends State<SearchPage> {
                       onPressed: () {
                         setState(
                           () {
-                            cityNameController.text = '';
+                            CityNameData.cityName.text = '';
                           },
                         );
                       },
@@ -69,12 +68,15 @@ class _SearchPageState extends State<SearchPage> {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    weatherBloc.add(
-                      WeatherFetchEvent(locationName: cityNameController.text),
-                    );
-                  }
+                  setState(() {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      weatherBloc.add(
+                        WeatherFetchEvent(),
+                      );
+                      Navigator.pop(context, CityNameData.cityName.text);
+                    }
+                  });
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
