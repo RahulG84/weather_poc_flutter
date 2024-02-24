@@ -71,10 +71,25 @@ class _HomePageState extends State<HomePage> {
       ),
       extendBodyBehindAppBar: true,
       body: BlocConsumer<WeatherBloc, WeatherState>(
-        listener: (context, state) {},
         bloc: weatherBloc,
         listenWhen: (previous, current) => current is WeatherActionState,
         buildWhen: (previous, current) => current is! WeatherActionState,
+        listener: (context, state) {
+          if (state is WeatherErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'city not found try different city',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           switch (state.runtimeType) {
             case WeatherLoadingState:
@@ -84,7 +99,7 @@ class _HomePageState extends State<HomePage> {
             case WeatherSucessesState:
               final successState = state as WeatherSucessesState;
               final String? weatherId =
-                  successState.weatherData!.weather![0]?.main;
+                  successState.weatherData!.weather![0].main;
               if (weatherId != null) {
                 backgroundImageURL = Utils.getBackgroundImageURL(weatherId)!;
               }
@@ -93,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(backgroundImageURL!),
+                    image: NetworkImage(backgroundImageURL),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -128,7 +143,6 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 16.0),
                           ],
                         ),
                         const SizedBox(height: 16.0),
@@ -190,14 +204,13 @@ class _HomePageState extends State<HomePage> {
                             WeatherDetail(
                               icon: Icons.location_on_outlined,
                               title: 'Latitude',
-                              value:
-                                  '${successState.weatherData!.coord!.lat}',
+                              value: '${successState.weatherData!.coord!.lat}',
                             ),
                             WeatherDetail(
                               icon: Icons.description,
                               title: 'Description',
                               value:
-                                  '${ successState.weatherData!.weather![0]?.description}',
+                                  '${successState.weatherData!.weather![0].description}',
                             ),
                           ],
                         ),
@@ -218,8 +231,47 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             case WeatherErrorState:
-              return const Center(
-                  child: Text('city not found try different city..'));
+              return Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      textAlign: TextAlign.center,
+                      'Oops! This city was not found. Please check the spelling or try another city.',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.black,
+                        size: 60,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SearchPage(),
+                          ),
+                        ).then((value) {
+                          if (value != null) {
+                            setState(
+                              () {
+                                CityNameData.cityName.text = value as String;
+                                weatherBloc.add(WeatherFetchEvent());
+                              },
+                            );
+                          }
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              );
             default:
               return const SizedBox();
           }
