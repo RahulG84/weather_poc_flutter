@@ -9,7 +9,6 @@ import '../../model/weather_data_model.dart';
 part 'weather_event.dart';
 part 'weather_state.dart';
 
-
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherBloc() : super(WeatherInitial()) {
     on<WeatherFetchEvent>(weatherFetchEvent);
@@ -29,7 +28,11 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
             WeatherData.fromJson(jsonDecode(response.body));
         emit(WeatherSucessesState(weatherData: weatherData));
       } else if (response.statusCode == 404) {
-        emit(WeatherErrorState(error: 'city not found'));
+        emit(
+          WeatherErrorState(
+            error: 'city not found',
+          ),
+        );
       }
     } catch (error) {
       print('error :  $error');

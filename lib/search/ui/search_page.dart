@@ -74,7 +74,10 @@ class _SearchPageState extends State<SearchPage> {
                       weatherBloc.add(
                         WeatherFetchEvent(),
                       );
-                      Navigator.pop(context, CityNameData.cityName.text);
+                      Navigator.pop(
+                        context,
+                        CityNameData.cityName.text,
+                      );
                     }
                   });
                 },
