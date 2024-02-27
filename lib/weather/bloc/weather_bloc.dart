@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_poc/model/city_name_data_model.dart';

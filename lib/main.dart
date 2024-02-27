@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:weather_poc/home/ui/home_page.dart';
-import 'package:weather_poc/search/ui/search_page.dart';
 
 void main() {
   runApp(const MyApp());
