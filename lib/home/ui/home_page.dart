@@ -19,8 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   WeatherBloc weatherBloc = WeatherBloc();
   String backgroundImageURL = "";
-  DateTime now = DateTime.now();
-  String currentDay = DateFormat('EEEE').format(DateTime.now());
+  String currentDay = DateFormat('EEEE d / M / y').format(DateTime.now());
 
   @override
   void initState() {
@@ -217,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 16.0),
                         Center(
                           child: Text(
-                            '$currentDay ${now.day} / ${now.month} / ${now.year}',
+                            currentDay,
                             style: const TextStyle(
                               fontSize: 24.0,
                               color: Colors.white,

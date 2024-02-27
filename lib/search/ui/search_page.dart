@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_poc/model/city_name_data_model.dart';
-
 import '../../weather/bloc/weather_bloc.dart';
 import '../widget/weather_icon.dart';
 
@@ -13,7 +13,38 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  List<String> userLocationEntries = [];
+  String locationKey = 'userLocation';
   WeatherBloc weatherBloc = WeatherBloc();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserLocation();
+  }
+
+  Future<void> getUserLocation() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userLocationEntries = prefs.getStringList(locationKey) ?? [];
+    setState(() {});
+  }
+
+  Future<void> setUserLocation() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(locationKey, userLocationEntries);
+  }
+
+  void onSubmit() {
+    if (CityNameData.cityName.text.isNotEmpty) {
+      setState(() {
+        userLocationEntries.add(CityNameData.cityName.text);
+      });
+      setUserLocation();
+      CityNameData.cityName.clear();
+      print(userLocationEntries);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +109,7 @@ class _SearchPageState extends State<SearchPage> {
                         context,
                         CityNameData.cityName.text,
                       );
+                      onSubmit();
                     }
                   });
                 },
@@ -115,6 +147,52 @@ class _SearchPageState extends State<SearchPage> {
                   WeatherIcon(icon: Icons.whatshot, color: Colors.orange),
                   WeatherIcon(icon: Icons.opacity, color: Colors.lightBlue),
                 ],
+              ),
+              const SizedBox(height: 20.0),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: userLocationEntries.length,
+                  itemBuilder: (context, index) {
+                    String locationName = userLocationEntries[index];
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                if (CityNameData.cityName.text !=
+                                    locationName) {
+                                  CityNameData.cityName.text = locationName;
+                                }
+                                Navigator.pop(
+                                  context,
+                                  CityNameData.cityName.text,
+                                );
+                              },
+                              child: Text(
+                                locationName.toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  userLocationEntries.removeAt(index);
+                                });
+                              },
+                              child: const Icon(Icons.delete_outlined),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
             ],
           ),
