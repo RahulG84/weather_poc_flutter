@@ -14,6 +14,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<String> userLocationEntries = [];
+  List<String> retrievedList = [];
   String locationKey = 'userLocation';
   WeatherBloc weatherBloc = WeatherBloc();
 
@@ -43,6 +44,18 @@ class _SearchPageState extends State<SearchPage> {
       setUserLocation();
       CityNameData.cityName.clear();
       print(userLocationEntries);
+    }
+  }
+
+  void removeCityName(int index) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    retrievedList = prefs.getStringList(locationKey)!;
+    if (retrievedList.isNotEmpty) {
+      setState(() {
+        retrievedList.removeAt(index);
+        userLocationEntries = retrievedList;
+      });
+      prefs.setStringList(locationKey, retrievedList);
     }
   }
 
@@ -181,9 +194,7 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                             TextButton(
                               onPressed: () {
-                                setState(() {
-                                  userLocationEntries.removeAt(index);
-                                });
+                                removeCityName(index);
                               },
                               child: const Icon(Icons.delete_outlined),
                             ),
