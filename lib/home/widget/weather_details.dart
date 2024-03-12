@@ -12,6 +12,7 @@ class WeatherDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: const Key('weatherDetail_container'),
       width: 120,
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -23,8 +24,17 @@ class WeatherDetail extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 48.0, color: Colors.blue),
-          const SizedBox(height: 8.0),
+          Icon(
+            icon,
+            size: 48.0,
+            color: Colors.blue,
+          ),
+          const SizedBox(
+            height: 8.0,
+            key: Key(
+              'weatherDetail_titleSizedBox',
+            ),
+          ),
           Text(
             title,
             overflow: TextOverflow.ellipsis,
@@ -34,10 +44,18 @@ class WeatherDetail extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: 8.0),
+          const SizedBox(
+            height: 8.0,
+            key: Key(
+              'weatherDetail_valueSizedBox',
+            ),
+          ),
           Text(
             value!,
-            style: const TextStyle(fontSize: 16.0, color: Colors.white),
+            style: const TextStyle(
+              fontSize: 16.0,
+              color: Colors.white,
+            ),
           ),
         ],
       ),

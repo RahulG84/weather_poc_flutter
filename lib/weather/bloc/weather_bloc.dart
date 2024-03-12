@@ -21,7 +21,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       var client = http.Client();
       var response = await client.get(Uri.parse(
           'https://api.openweathermap.org/data/2.5/weather?q=${CityNameData.cityName.text}&units=metric&appid=f3ba35f1e22cb767b8e4e56ba17bfeae'));
-      print(response.body);
+      // print(response.body);
       if (response.statusCode == 200) {
         WeatherData weatherData =
             WeatherData.fromJson(jsonDecode(response.body));
@@ -34,7 +34,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         );
       }
     } catch (error) {
-      print('error :  $error');
+      // print('error :  $error');
     }
   }
 }
