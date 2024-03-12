@@ -1,5 +1,5 @@
 class Utils {
-  static String? getBackgroundImageURL(String? weatherId) {
+   static String? getBackgroundImageURL(String? weatherId) {
     switch (weatherId) {
       case 'Thunderstorm':
         //Thunderstorm

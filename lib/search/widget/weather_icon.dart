@@ -12,6 +12,11 @@ class WeatherIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(icon, size: 48.0, color: color);
+    return Icon(
+      key: const Key('weatherIcon'),
+      icon,
+      size: 48.0,
+      color: color,
+    );
   }
 }
