@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_poc/model/city_name_data_model.dart';
 import '../../weather/bloc/weather_bloc.dart';
 import '../widget/weather_icon.dart';
+import 'package:http/http.dart' as http;
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class _SearchPageState extends State<SearchPage> {
   List<String> userLocationEntries = [];
   List<String> retrievedList = [];
   String locationKey = 'userLocation';
-  WeatherBloc weatherBloc = WeatherBloc();
+  WeatherBloc weatherBloc = WeatherBloc(client: http.Client());
 
   @override
   void initState() {

@@ -8,6 +8,7 @@ import '../../model/city_name_data_model.dart';
 import '../../weather/bloc/weather_bloc.dart';
 import '../widget/weather_details.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  WeatherBloc weatherBloc = WeatherBloc();
+  WeatherBloc weatherBloc = WeatherBloc(client: http.Client());
   String backgroundImageURL = "";
   String currentDay = DateFormat('EEEE d / M / y').format(DateTime.now());
 
